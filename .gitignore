@@ -1,0 +1,39 @@
+# ── dependencies ────────────────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.*
+
+# ── build output ────────────────────────────────────────────────────────────
+.next/
+out/
+build/
+next-env.d.ts
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# ── environment ─────────────────────────────────────────────────────────────
+# Never commit real values. .env.example is the template and IS tracked.
+.env
+.env.*
+!.env.example
+
+# ── deployment ──────────────────────────────────────────────────────────────
+.vercel
+
+# ── testing / coverage ──────────────────────────────────────────────────────
+coverage/
+
+# ── editors and operating systems ───────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.pem
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# macOS archive cruft that came in with the supplied photographs
+__MACOSX/
