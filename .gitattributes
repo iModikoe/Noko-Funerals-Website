@@ -1,0 +1,21 @@
+# Normalise line endings so the repo is identical on Windows, macOS and the
+# Linux runners that build it on CI and Vercel.
+* text=auto eol=lf
+
+# Never let Git touch binaries.
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.JPG    binary
+*.JPEG   binary
+*.webp   binary
+*.avif   binary
+*.ico    binary
+*.woff   binary
+*.woff2  binary
+*.mp4    binary
+*.mov    binary
+*.MOV    binary
+
+# Keep generated lockfile noise out of pull request diffs.
+package-lock.json  -diff linguist-generated

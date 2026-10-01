@@ -1,0 +1,337 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   NOKO FUNERALS — DESIGN TOKENS
+   Palette derived from the Noko Funerals logo: near-black ink, warm ivory
+   and the brand's champagne gold. Gold is used sparingly, as an accent only.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* Ink — deep charcoal, the primary dark surface */
+  --color-ink-950: #101012;
+  --color-ink-900: #17171a;
+  --color-ink-800: #1f1f23;
+  --color-ink-700: #2b2b31;
+  --color-ink-600: #3d3d45;
+  --color-ink-500: #5a5a64;
+  --color-ink-400: #8b8b95;
+
+  /* Ivory — warm off-white, the primary light surface */
+  --color-ivory-50: #fdfbf7;
+  --color-ivory-100: #faf6ee;
+  --color-ivory-200: #f2ece0;
+  --color-ivory-300: #e7dfcf;
+  --color-ivory-400: #d6cbb5;
+
+  /* Gold — the brand accent. Restrained: rules, small marks, key numbers. */
+  --color-gold-300: #e2c584;
+  --color-gold-400: #d4a54a;
+  --color-gold-500: #b8862f;
+  /* Used for the small-caps eyebrows and inline accents on ivory. Measured at
+     5.1:1 on ivory-100 and 4.7:1 on ivory-200, so it clears AA at the 11px
+     the eyebrows are set in. Do not lighten it. */
+  --color-gold-600: #8a6120;
+  --color-gold-700: #6f4d16;
+
+  --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Keep anchored headings clear of the sticky header */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ivory-100);
+    color: var(--color-ink-800);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  /* Cormorant defaults to old-style figures, which make a price like "R249"
+     hop up and down and read as decorative. Prices and step numbers need to
+     be scanned, so the display face uses lining figures throughout. */
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-variant-numeric: lining-nums;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* A single, consistent, highly visible focus ring everywhere */
+  :focus-visible {
+    outline: 2px solid var(--color-gold-500);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* On dark surfaces the gold ring needs to be brighter */
+  .on-ink :focus-visible {
+    outline-color: var(--color-gold-300);
+  }
+
+  ::selection {
+    background: var(--color-gold-400);
+    color: var(--color-ink-900);
+  }
+
+  /* Native disclosure marker removed — we draw our own */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary {
+    list-style: none;
+    cursor: pointer;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COMPONENT PRIMITIVES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@layer components {
+  /* Small-caps editorial label used above section headings */
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-gold-600);
+  }
+  .on-ink .eyebrow {
+    color: var(--color-gold-400);
+  }
+
+  /*
+   * A very fine film grain, laid over the charcoal sections only. It stops
+   * large flat dark areas from banding on cheap screens and gives the page a
+   * photographic, printed quality rather than a flat digital one.
+   * Pure CSS — no image request.
+   */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /*
+   * Card hover. Slow and weighted — the card settles rather than pops, which
+   * suits the subject far better than a springy lift would.
+   */
+  .lift {
+    transition:
+      transform 600ms var(--ease-soft),
+      box-shadow 600ms var(--ease-soft),
+      border-color 600ms var(--ease-soft);
+  }
+  .lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 26px 52px -24px rgb(23 23 26 / 0.3);
+    border-color: color-mix(in oklab, var(--color-gold-500) 55%, transparent);
+  }
+  .on-ink .lift:hover {
+    box-shadow: 0 26px 52px -24px rgb(0 0 0 / 0.55);
+    border-color: color-mix(in oklab, var(--color-gold-400) 45%, transparent);
+  }
+
+  /* Each route fades in as it mounts. See src/app/template.tsx. */
+  .page-enter {
+    animation: noko-fade 500ms var(--ease-soft) both;
+  }
+
+  /* Hairline rule with a gold segment — the recurring editorial motif */
+  .rule {
+    position: relative;
+    height: 1px;
+    background: var(--color-ivory-300);
+  }
+  .rule::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 3.5rem;
+    background: var(--color-gold-500);
+  }
+  .on-ink .rule {
+    background: var(--color-ink-700);
+  }
+  .on-ink .rule::before {
+    background: var(--color-gold-400);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOTION — all of it opt-out under prefers-reduced-motion
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes noko-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes noko-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Continuous band of town names. Travels exactly half its width, which is one
+   full copy of the list, so the loop is invisible. */
+@keyframes noko-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* The gold bloom behind the hero, breathing very slowly. */
+@keyframes noko-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+/* A hairline that draws itself across. */
+@keyframes noko-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* The scroll cue in the hero. */
+@keyframes noko-cue {
+  0% {
+    transform: translateY(-40%);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(140%);
+    opacity: 0;
+  }
+}
+
+/*
+ * Scroll reveals.
+ *
+ * Content is only ever hidden while `.reveal-ready` is on <html>. That class
+ * is added by a tiny inline script in the document head (no flash of content)
+ * and removed again by a failsafe if the app has not hydrated shortly after.
+ *
+ * The effect of that arrangement:
+ *   • JavaScript disabled      → class never added  → everything visible
+ *   • Hydration fails or stalls → failsafe fires    → everything visible
+ *   • Normal load               → reveals animate in on scroll
+ *
+ * A family must never arrive on a blank page because an animation did not run.
+ */
+.reveal-ready [data-reveal] {
+  opacity: 0;
+}
+
+.reveal-ready [data-reveal].is-visible {
+  animation: noko-rise 0.75s var(--ease-soft) both;
+}
+
+.reveal-ready [data-reveal="fade"].is-visible {
+  animation: noko-fade 0.9s var(--ease-soft) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Never hide content from someone who has asked for no motion */
+  .reveal-ready [data-reveal],
+  .reveal-ready [data-reveal].is-visible,
+  [data-reveal] {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PRINT — families often print a package or the contact numbers
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media print {
+  [data-no-print] {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+    color: #000;
+    font-size: 11pt;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+  }
+}
